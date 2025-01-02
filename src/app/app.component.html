@@ -1,14 +1,5 @@
 <div class="container">
-  <app-face-snap
-    [faceSnap]="mySnap"
-    class="face-snap-component"
-  ></app-face-snap>
-  <app-face-snap
-    [faceSnap]="secondSnap"
-    class="face-snap-component"
-  ></app-face-snap>
-  <app-face-snap
-    [faceSnap]="lastSnap"
-    class="face-snap-component"
-  ></app-face-snap>
+  @for (faceSnapElement of facesnaps; track $index) {
+  <app-face-snap [faceSnap]="faceSnapElement" class="face-snap-component" />
+  }
 </div>

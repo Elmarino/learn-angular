@@ -1,25 +1,25 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass, NgStyle } from '@angular/common';
 import { FaceSnap } from '../models/face-snap';
 
 @Component({
   selector: 'app-face-snap',
-  imports: [CommonModule],
+  imports: [CommonModule, NgStyle, NgClass],
   templateUrl: './face-snap.component.html',
   styleUrl: './face-snap.component.scss'
 })
 export class FaceSnapComponent {
   @Input() faceSnap!: FaceSnap;
 
-  snapped: boolean = false;
+  hasSnapped: boolean = false;
 
   onSnap(): void {
-    if (!this.snapped) {
+    if (!this.hasSnapped) {
       this.faceSnap.addSnap();
-      this.snapped = true;
+      this.hasSnapped = true;
     } else {
       this.faceSnap.removeSnap();
-      this.snapped = false;
+      this.hasSnapped = false;
     }
   }
 }
