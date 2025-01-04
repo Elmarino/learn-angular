@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-top: 4%;
+  .face-snap-component {
+    width: 30%; // Set the width to 25%
+    display: inline-block; // Ensure it behaves like a block element but respects width
+  }
+}
