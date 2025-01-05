@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FaceSnap } from '../models/face-snap';
 import { FaceSnapComponent } from '../face-snap/face-snap.component';
+import { FaceSnapsService } from '../services/face-snaps.service';
 
 @Component({
   selector: 'app-face-snap-list',
@@ -11,52 +12,10 @@ import { FaceSnapComponent } from '../face-snap/face-snap.component';
 export class FaceSnapListComponent implements OnInit {
   faceSnaps!: FaceSnap[];
 
+  constructor(private faceSnapsService: FaceSnapsService) {}
+
   ngOnInit(): void {
-    this.faceSnaps = [
-      new FaceSnap(
-        'Stella',
-        'Description de fou de ma dulcinée',
-        new Date(),
-        'https://cdn.pixabay.com/photo/2015/05/31/16/03/teddy-bear-792273_1280.jpg',
-        100,
-        'dans ton uc'
-      ),
-      new FaceSnap(
-        'Allert',
-        'Description de fou de ma dulcinée',
-        new Date(),
-        'https://cdn.pixabay.com/photo/2015/05/31/16/03/teddy-bear-792273_1280.jpg',
-        200
-      ),
-      new FaceSnap(
-        'Allert',
-        'Description de fou de ma dulcinée',
-        new Date(),
-        'https://cdn.pixabay.com/photo/2015/05/31/16/03/teddy-bear-792273_1280.jpg',
-        10
-      ),
-      new FaceSnap(
-        'Allert',
-        'Description de fou de ma dulcinée',
-        new Date(),
-        'https://cdn.pixabay.com/photo/2015/05/31/16/03/teddy-bear-792273_1280.jpg',
-        10
-      ),
-      new FaceSnap(
-        'Allert',
-        'Description de fou de ma dulcinée',
-        new Date(),
-        'https://cdn.pixabay.com/photo/2015/05/31/16/03/teddy-bear-792273_1280.jpg',
-        10
-      ),
-      new FaceSnap(
-        'Poupou',
-        'Description de fou de ma dulcinée',
-        new Date(),
-        'https://cdn.pixabay.com/photo/2015/05/31/16/03/teddy-bear-792273_1280.jpg',
-        10,
-        'dans ton fiac'
-      )
-    ];
+    this.faceSnaps = this.faceSnapsService.getFaceSnaps();
+    this.faceSnaps[1].setLocation('à la montagne');
   }
 }

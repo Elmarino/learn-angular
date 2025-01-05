@@ -8,22 +8,34 @@ import {
 } from '@angular/common';
 import { FaceSnap } from '../models/face-snap';
 import { FaceSnapsService } from '../services/face-snaps.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-face-snap',
-  imports: [CommonModule, NgStyle, NgClass, UpperCasePipe, DatePipe],
-  templateUrl: './face-snap.component.html',
-  styleUrl: './face-snap.component.scss'
+  selector: 'app-single-face-snap',
+  imports: [
+    CommonModule,
+    NgStyle,
+    NgClass,
+    UpperCasePipe,
+    DatePipe,
+    RouterLink
+  ],
+  templateUrl: './single-face-snap.component.html',
+  styleUrl: './single-face-snap.component.scss'
 })
-export class FaceSnapComponent {
-  @Input() faceSnap!: FaceSnap;
-
+export class SingleFaceSnapComponent implements OnInit {
+  faceSnap!: FaceSnap;
   hasSnapped: boolean = false;
+
   constructor(
     private faceSnapsService: FaceSnapsService,
-    private router: Router
+    private route: ActivatedRoute
   ) {}
+
+  ngOnInit(): void {
+    const faceSnapId = this.route.snapshot.params['id'];
+    this.faceSnap = this.faceSnapsService.getFaceSnapById(faceSnapId);
+  }
 
   onSnap(): void {
     if (!this.hasSnapped) {
@@ -33,9 +45,5 @@ export class FaceSnapComponent {
       this.faceSnapsService.unsnapFaceSnapById(this.faceSnap.id);
       this.hasSnapped = false;
     }
-  }
-
-  onViewFaceSnap() {
-    this.router.navigateByUrl(`facesnaps/${this.faceSnap.id}`);
   }
 }

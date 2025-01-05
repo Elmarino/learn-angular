@@ -1,6 +1,6 @@
 <div class="face-snap-card" [ngClass]="{ snapped: hasSnapped }">
   <h2>{{ faceSnap.title | uppercase }}</h2>
-  <button (click)="onViewFaceSnap()">VOIR LE SNAP</button>
+  <a routerLink="/facesnaps">BACK TO LIST</a>
   @if (faceSnap.location) {
   <p>Location: {{ faceSnap.location }}</p>
   } @else {
