@@ -85,4 +85,28 @@ export class FaceSnapsService {
     }
     return foundFaceSnap;
   }
+
+  addFaceSnap(faceSnap: FaceSnap): void {
+    this.faceSnaps.push(faceSnap);
+  }
+
+  createFaceSnap(fields: {
+    title: string;
+    description: string;
+    createdAt: Date;
+    imgUrl: string;
+    snaps: number;
+    location?: string;
+  }): FaceSnap {
+    const faceSnap = new FaceSnap(
+      fields.title,
+      fields.description,
+      fields.createdAt,
+      fields.imgUrl,
+      0,
+      fields.location
+    );
+    this.addFaceSnap(faceSnap);
+    return faceSnap;
+  }
 }

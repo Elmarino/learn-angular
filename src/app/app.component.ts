@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FaceSnapListComponent } from './face-snap-list/face-snap-list.component';
 import { HeaderComponent } from './header/header.component';
 import { RouterOutlet } from '@angular/router';
-import { filter, interval, map, Observable, tap } from 'rxjs';
+import { filter, interval, map, Observable, take, tap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.interval$ = interval(2000).pipe(
+      take(1),
       filter((value) => value % 3 === 0),
       map((value) => {
         if (value % 2 === 0) {
