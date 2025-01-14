@@ -36,7 +36,7 @@ export class NewFaceSnapComponent implements OnInit {
       {
         title: [null, [Validators.required]],
         description: [null, [Validators.required]],
-        imgUrl: [
+        imageUrl: [
           null,
           [Validators.required, Validators.pattern(this.urlRegex)]
         ],
@@ -64,9 +64,10 @@ export class NewFaceSnapComponent implements OnInit {
     const newFaceSnap = this.faceSnapsService.createFaceSnap(
       this.snapForm.value
     );
-    if (newFaceSnap) {
+    console.log(newFaceSnap);
+    /* if (newFaceSnap) {
       this.router.navigateByUrl('facesnaps');
-    }
+    } */
 
     console.log('new', newFaceSnap);
   }

@@ -1,5 +1,5 @@
 <div class="container">
-  @for (faceSnap of faceSnaps; track $index) {
+  @for (faceSnap of faceSnaps$ | async ; track $index) {
   <app-face-snap [faceSnap]="faceSnap" class="face-snap-component" />
   }
 </div>

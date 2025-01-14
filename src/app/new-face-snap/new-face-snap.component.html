@@ -16,8 +16,8 @@
       </textarea>
     </div>
     <div class="form-group">
-      <label for="imgUrl">URL de l'image</label>
-      <input id="imgUrl" type="text" formControlName="imgUrl" />
+      <label for="imageUrl">URL de l'image</label>
+      <input id="imageUrl" type="text" formControlName="imageUrl" />
     </div>
     <div class="form-group">
       <label for="location">Lieu</label>
@@ -39,7 +39,11 @@
   <p>
     Mis en ligne {{ faceSnap.createdAt | date : 'à HH:mm, le d MMMM yyyy' }}
   </p>
-  <img *ngIf="faceSnap.imgUrl" [src]="faceSnap.imgUrl" [alt]="faceSnap.title" />
+  <img
+    *ngIf="faceSnap.imageUrl"
+    [src]="faceSnap.imageUrl"
+    [alt]="faceSnap.title"
+  />
   <p>{{ faceSnap.description }}</p>
   <p *ngIf="faceSnap.location">Photo prise à {{ faceSnap.location }}</p>
 </div>

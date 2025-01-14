@@ -6,7 +6,7 @@
   } @else {
   <p>Location non spécifié :{{ faceSnap.location }}</p>
   }
-  <img [src]="faceSnap.imgUrl" [alt]="faceSnap.title" srcset="" />
+  <img [src]="faceSnap.imageUrl" [alt]="faceSnap.title" srcset="" />
   <p>{{ faceSnap.description }}</p>
   <p>Face snap crée le : <br />{{ faceSnap.createdAt | date : 'fullDate' }}</p>
   <div>

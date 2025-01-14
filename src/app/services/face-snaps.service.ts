@@ -1,112 +1,87 @@
+import { map, Observable, switchMap } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { FaceSnap } from '../models/face-snap';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FaceSnapsService {
-  private faceSnaps: FaceSnap[] = [
-    new FaceSnap(
-      'Stella',
-      'Description de fou de ma dulcinée',
-      new Date(),
-      'https://cdn.pixabay.com/photo/2015/05/31/16/03/teddy-bear-792273_1280.jpg',
-      100,
-      'dans la chambre'
-    ),
-    new FaceSnap(
-      'Allert',
-      'Description de fou de ma dulcinée',
-      new Date(),
-      'https://cdn.pixabay.com/photo/2015/05/31/16/03/teddy-bear-792273_1280.jpg',
-      200
-    ),
-    new FaceSnap(
-      'Allert',
-      'Description de fou de ma dulcinée',
-      new Date(),
-      'https://cdn.pixabay.com/photo/2015/05/31/16/03/teddy-bear-792273_1280.jpg',
-      10
-    ),
-    new FaceSnap(
-      'Allert',
-      'Description de fou de ma dulcinée',
-      new Date(),
-      'https://cdn.pixabay.com/photo/2015/05/31/16/03/teddy-bear-792273_1280.jpg',
-      10
-    ).withLocation('dans le fuuuuuur'),
-    new FaceSnap(
-      'Allert',
-      'Description de fou de ma dulcinée',
-      new Date(),
-      'https://cdn.pixabay.com/photo/2015/05/31/16/03/teddy-bear-792273_1280.jpg',
-      10
-    ),
-    new FaceSnap(
-      'Poupou',
-      'Description de fou de ma dulcinée',
-      new Date(),
-      'https://cdn.pixabay.com/photo/2015/05/31/16/03/teddy-bear-792273_1280.jpg',
-      10,
-      'dans ton fiac'
-    )
-  ];
+  private faceSnaps: FaceSnap[] = [];
 
-  getFaceSnaps(): FaceSnap[] {
-    return [...this.faceSnaps];
+  constructor(private http: HttpClient) {}
+
+  getFaceSnaps(): Observable<FaceSnap[]> {
+    return this.http.get<FaceSnap[]>('http://localhost:3000/facesnaps');
+    //return [...this.faceSnaps];
   }
-
-  snapFaceSnapById(faceSnapId: string): void {
-    const foundFaceSnap = this.faceSnaps.find(
-      (faceSnap) => faceSnap.id === faceSnapId
+  snapFaceSnapById(faceSnapId: number): Observable<FaceSnap> {
+    return this.getFaceSnapById(faceSnapId).pipe(
+      map((faceSnap) => {
+        faceSnap.snaps++;
+        return faceSnap;
+      }),
+      switchMap((updatedFaceSnap) =>
+        this.http.put<FaceSnap>(
+          `http://localhost:3000/facesnaps/${faceSnapId}`,
+          updatedFaceSnap
+        )
+      )
     );
-    if (!foundFaceSnap) {
-      throw new Error('FaceSnap not found!');
-    }
-    foundFaceSnap.addSnap();
   }
 
-  unsnapFaceSnapById(faceSnapId: string): void {
-    const foundFaceSnap = this.faceSnaps.find(
-      (faceSnap) => faceSnap.id === faceSnapId
+  unsnapFaceSnapById(faceSnapId: number): Observable<FaceSnap> {
+    return this.getFaceSnapById(faceSnapId).pipe(
+      map((faceSnap) => {
+        faceSnap.snaps--;
+        return faceSnap;
+      }),
+      switchMap((updatedFaceSnap) =>
+        this.http.put<FaceSnap>(
+          `http://localhost:3000/facesnaps/${faceSnapId}`,
+          updatedFaceSnap
+        )
+      )
     );
-    if (!foundFaceSnap) {
-      throw new Error('FaceSnap not found!');
-    }
-    foundFaceSnap.removeSnap();
   }
 
-  getFaceSnapById(faceSnapId: string): FaceSnap {
-    const foundFaceSnap = this.faceSnaps.find(
-      (faceSnap) => faceSnap.id === faceSnapId
+  getFaceSnapById(faceSnapId: number): Observable<FaceSnap> {
+    return this.http.get<FaceSnap>(
+      `http://localhost:3000/facesnaps/${faceSnapId}`
     );
-    if (!foundFaceSnap) {
-      throw new Error('FaceSnap not found!');
-    }
-    return foundFaceSnap;
   }
 
-  addFaceSnap(faceSnap: FaceSnap): void {
-    this.faceSnaps.push(faceSnap);
+  addFaceSnap(faceSnap: FaceSnap): Observable<FaceSnap> {
+    return this.getFaceSnaps().pipe(
+      map((facesnaps) => [...facesnaps].sort((a, b) => a.id - b.id)),
+      map((sortedFacesnaps) => sortedFacesnaps[sortedFacesnaps.length - 1]),
+      map((previousFacesnap) => ({
+        ...faceSnap,
+        snaps: 0,
+        id: previousFacesnap.id + 1
+      })),
+      switchMap((newFacesnap) =>
+        this.http.post<FaceSnap>('http://localhost:3000/facesnaps', newFacesnap)
+      )
+    );
   }
 
   createFaceSnap(fields: {
     title: string;
     description: string;
     createdAt: Date;
-    imgUrl: string;
+    imageUrl: string;
     snaps: number;
     location?: string;
-  }): FaceSnap {
+  }): Observable<FaceSnap> {
     const faceSnap = new FaceSnap(
       fields.title,
       fields.description,
       fields.createdAt,
-      fields.imgUrl,
+      fields.imageUrl,
       0,
       fields.location
     );
-    this.addFaceSnap(faceSnap);
-    return faceSnap;
+    return this.addFaceSnap(faceSnap);
   }
 }

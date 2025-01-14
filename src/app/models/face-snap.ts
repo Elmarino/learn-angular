@@ -1,16 +1,16 @@
 export class FaceSnap {
   location?: string;
-  id: string;
+  id: number;
 
   constructor(
     public title: string,
     public description: string,
     public createdAt: Date,
-    public imgUrl: string,
+    public imageUrl: string,
     public snaps: number,
     location?: string
   ) {
-    this.id = crypto.randomUUID().substring(0, 8);
+    this.id = parseInt(crypto.randomUUID().substring(0, 8), 16);
     this.location = location;
   }
 
